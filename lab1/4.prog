@@ -1,0 +1,3 @@
+begindecl 
+  integer abc;
+enddecl
