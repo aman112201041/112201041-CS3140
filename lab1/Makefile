@@ -8,5 +8,4 @@ all:
 
 	g++ -o ./bin/compiler ./src/lex.yy.c ./src/y.tab.c -Wno-c++11-compat-deprecated-writable-strings -Wno-deprecated
 
-run:
-	./bin/compiler
+
