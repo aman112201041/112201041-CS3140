@@ -1,0 +1,26 @@
+decl 
+  integer arr[10];
+  integer key, i;
+  integer l, r, mid, result;
+enddecl
+begin
+
+
+  for(i = 0; i < 10; i = i + 1){
+    arr[i] = i + 10;
+  }
+
+
+  for(i=0; ; ){
+    if(i>10) then
+      break;
+    endif
+
+    i = i+1;
+    write(i);
+  }
+
+  write(i);
+
+
+end
