@@ -29,10 +29,25 @@ void printNode(node* n){
     if(n == nullptr) return;
     switch(n->id_type){
         case(VARIABLE):
+            // if(n->child){
+            //     // array
+            //     if(n->child->next) {
+            //         // 2d array
+            //         printf("VAR( %s[%d][%d] ) ", n->name, evaluate_expr(n->child), evaluate_expr(n->child->next));
+            //     }
+            //     else {
+            //         // 1d array
+            //         printf("VAR( %s[%d] ) ", n->name, evaluate_expr(n->child));
+            //     }
+            //     break;
+            // }
             printf("VAR(%s) ", n->name);
             break;
         case(NUMBER):
             printf("NUM(%d) ", n->val);
+            break;
+        case(FLOATNUMBER):
+            printf("float(%f) ", n->fval);
             break;
         case(OP):
             printf("OP(%s) ", n->name);

@@ -45,6 +45,8 @@ integer							{return T_INT;}
 
 boolean							{return T_BOOL;}
 
+float							{return T_FLOAT;}
+
 decl							{return DECL;}
 
 enddecl							{return ENDDECL;}
@@ -61,6 +63,8 @@ continue						{return CONTINUE;}
 "<="							{ return LESSTHANOREQUAL; }
 "=="							{ return EQUALEQUAL; }
 "!="							{ return NOTEQUAL; }
+
+{digit}+"."{digit}*   			{ yylval.fnum = atof(yytext);  return FLOAT_NUM; }
 
 {digit}+						{ yylval.num=atoi(yytext); return NUM; }
 

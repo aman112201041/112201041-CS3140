@@ -43,34 +43,36 @@
      END = 259,
      T_INT = 260,
      T_BOOL = 261,
-     READ = 262,
-     WRITE = 263,
-     DECL = 264,
-     ENDDECL = 265,
-     IF = 266,
-     THEN = 267,
-     ELSE = 268,
-     ENDIF = 269,
-     LOGICAL_AND = 270,
-     LOGICAL_NOT = 271,
-     LOGICAL_OR = 272,
-     EQUALEQUAL = 273,
-     LESSTHANOREQUAL = 274,
-     GREATERTHANOREQUAL = 275,
-     NOTEQUAL = 276,
-     WHILE = 277,
-     DO = 278,
-     ENDWHILE = 279,
-     FOR = 280,
-     T = 281,
-     F = 282,
-     MAIN = 283,
-     RETURN = 284,
-     BREAK = 285,
-     CONTINUE = 286,
-     INCREMENT = 287,
-     NUM = 288,
-     VAR = 289
+     T_FLOAT = 262,
+     READ = 263,
+     WRITE = 264,
+     DECL = 265,
+     ENDDECL = 266,
+     IF = 267,
+     THEN = 268,
+     ELSE = 269,
+     ENDIF = 270,
+     LOGICAL_AND = 271,
+     LOGICAL_NOT = 272,
+     LOGICAL_OR = 273,
+     EQUALEQUAL = 274,
+     LESSTHANOREQUAL = 275,
+     GREATERTHANOREQUAL = 276,
+     NOTEQUAL = 277,
+     WHILE = 278,
+     DO = 279,
+     ENDWHILE = 280,
+     FOR = 281,
+     T = 282,
+     F = 283,
+     MAIN = 284,
+     RETURN = 285,
+     BREAK = 286,
+     CONTINUE = 287,
+     INCREMENT = 288,
+     NUM = 289,
+     VAR = 290,
+     FLOAT_NUM = 291
    };
 #endif
 /* Tokens.  */
@@ -78,34 +80,36 @@
 #define END 259
 #define T_INT 260
 #define T_BOOL 261
-#define READ 262
-#define WRITE 263
-#define DECL 264
-#define ENDDECL 265
-#define IF 266
-#define THEN 267
-#define ELSE 268
-#define ENDIF 269
-#define LOGICAL_AND 270
-#define LOGICAL_NOT 271
-#define LOGICAL_OR 272
-#define EQUALEQUAL 273
-#define LESSTHANOREQUAL 274
-#define GREATERTHANOREQUAL 275
-#define NOTEQUAL 276
-#define WHILE 277
-#define DO 278
-#define ENDWHILE 279
-#define FOR 280
-#define T 281
-#define F 282
-#define MAIN 283
-#define RETURN 284
-#define BREAK 285
-#define CONTINUE 286
-#define INCREMENT 287
-#define NUM 288
-#define VAR 289
+#define T_FLOAT 262
+#define READ 263
+#define WRITE 264
+#define DECL 265
+#define ENDDECL 266
+#define IF 267
+#define THEN 268
+#define ELSE 269
+#define ENDIF 270
+#define LOGICAL_AND 271
+#define LOGICAL_NOT 272
+#define LOGICAL_OR 273
+#define EQUALEQUAL 274
+#define LESSTHANOREQUAL 275
+#define GREATERTHANOREQUAL 276
+#define NOTEQUAL 277
+#define WHILE 278
+#define DO 279
+#define ENDWHILE 280
+#define FOR 281
+#define T 282
+#define F 283
+#define MAIN 284
+#define RETURN 285
+#define BREAK 286
+#define CONTINUE 287
+#define INCREMENT 288
+#define NUM 289
+#define VAR 290
+#define FLOAT_NUM 291
 
 
 
@@ -117,9 +121,11 @@ typedef union YYSTYPE
 	int num;
 	char* id;
 	struct node* tree;
+
+	float fnum;
 }
 /* Line 1529 of yacc.c.  */
-#line 123 "y.tab.h"
+#line 129 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

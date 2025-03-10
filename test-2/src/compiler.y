@@ -22,10 +22,12 @@
 	int num;
 	char* id;
 	struct node* tree;
+
+	float fnum;
 }
 
 %token BEG END
-%token T_INT T_BOOL
+%token T_INT T_BOOL T_FLOAT
 %token READ WRITE
 %token DECL ENDDECL
 
@@ -52,6 +54,7 @@
 
 %token <num> NUM
 %token <id> VAR 
+%token <fnum> FLOAT_NUM
 
 %type <tree> Ldecl_sec Ldecl_list Ldecl Lid_list Lid
 %type <tree> var_expr expr assign_stmt statement stmt_list write_stmt cond_stmt Statement_Sec
@@ -99,6 +102,7 @@
 
 	type	:	T_INT						{ var_type = _INT_; }
 			|	T_BOOL						{ var_type = _BOOLEAN_; }
+			|	T_FLOAT						{ var_type = _FLOAT_; }
 		;
 
 	Lid_list:	Lid							{$$ = $1;}
@@ -213,6 +217,7 @@
 	
 
 	expr	:	NUM 						{ $$ = createNum($1); }
+		|	FLOAT_NUM						{ $$ = createFloat($1); }
 		|	'-' expr						{  $$ = createOp("-", $2, NULL); }
 		|	var_expr						{ $$ = $1; }
 		|	T								{ $$ = createNum(1); }

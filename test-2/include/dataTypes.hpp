@@ -23,7 +23,8 @@ enum identifier{
     FOR_STMNT,
     BREAK_STMNT,
     CONTINUE_STMNT,
-    WHILE_STMNT
+    WHILE_STMNT,
+    FLOATNUMBER, 
 };
 
 typedef struct node{
@@ -33,6 +34,8 @@ typedef struct node{
     struct node* child;
     struct node* next;
     struct node* rightMostChld;
+
+    float fval;
 } node;
 
 
@@ -42,6 +45,8 @@ enum _DATA_TYPES_{
     _ARRAY_,
     _BOOLEAN_,
     _ARRAY2D_,
+    _FLOAT_,
+    _FLOATNUMBER_,
 };
 
 union geek { 
@@ -49,6 +54,9 @@ union geek {
     int* arr;
     int boolean;
     int** arr2d;
+    float fnum;
+    float* farr;
+    float** farr2d;
 };
 
 struct SymbolEntry {
@@ -74,63 +82,75 @@ void update_var(char* name, int val, int isArr=0, int index=0){
 
 }
 
-int get_variable_value(char* name, int isArr=0, int index=0){
+void update_var(char* name, float val, int isArr=0, int index=0){
+    // printf("----- %s = %f ------", name, val);
+    if(isArr == -1){
+        symbol_table[name].data.farr[index] = val;
+    }
+    else if(isArr == 0){
+        symbol_table[name].data.fnum = val;      // not sure. to change
+    }
+    else {
+        symbol_table[name].data.farr2d[isArr-1][index] = val;
+    }
+
+}
+
+struct SymbolEntry get_variable_value(char* name, int isArr=0, int index=0){
+    struct SymbolEntry expr_val;
+    expr_val.type = _INT_;
+    expr_val.data.num = 0;
+
     if (symbol_table.find(name) == symbol_table.end()){
         printf("\n ERROR: variable %s not found in symbol table\n", name);
-        return 0;
+        return expr_val;
     }
 
     switch(symbol_table[name].type){
         case _INT_:
+            expr_val.type = _INT_;
             if(isArr == -1){
-                return symbol_table[name].data.arr[index];
+                expr_val.data.num = symbol_table[name].data.arr[index];
             }
             else if(isArr == 0){
-                return symbol_table[name].data.num;
+                expr_val.data.num = symbol_table[name].data.num;
             }
             else{
-                return symbol_table[name].data.arr2d[isArr-1][index];
+                expr_val.data.num = symbol_table[name].data.arr2d[isArr-1][index];
             }
+            return expr_val;
         
-        case _BOOLEAN_:
-            if(isArr)
-                return symbol_table[name].data.arr[index];
-            else
-                return symbol_table[name].data.boolean;
+        case _FLOAT_:
+            expr_val.type = _FLOAT_;
+            if(isArr == -1){
+                expr_val.data.fnum = symbol_table[name].data.farr[index];
+            }
+            else if(isArr == 0){
+                expr_val.data.fnum = symbol_table[name].data.fnum;
+                printf(" %s=%f ", name, symbol_table[name].data.fnum);
+                // printf(" xxx %s = %f %f xxx ", name, expr_val.data.fnum, symbol_table[name].data.fnum);
+            }
+            else{
+                expr_val.data.fnum = symbol_table[name].data.farr2d[isArr-1][index];
+                // printf(" xxx %s = %f %f xxx ", name, expr_val.data.fnum, symbol_table[name].data.farr2d[isArr-1][index]);
+            }
+            return expr_val;
+        
+        // case _BOOLEAN_:
+        //     if(isArr)
+        //         return symbol_table[name].data.arr[index];
+        //     else
+        //         return symbol_table[name].data.boolean;
 
         default:
             printf("\n ERROR: variable %s is not an int, array or boolean\n", name);
     }
 
-    return 0;
+    return expr_val;
 }
 
 
-// int get_variable_value(char* name, int isArr=0, int index=0){
-//     if (symbol_table.find(name) == symbol_table.end()){
-//         printf("\n ERROR: variable %s not found in symbol table\n", name);
-//         return 0;
-//     }
 
-//     switch(symbol_table[name].type){
-//         case _INT_:
-//             if(isArr)
-//                 return symbol_table[name].data.arr[index];
-//             else
-//                 return symbol_table[name].data.num;
-        
-//         case _BOOLEAN_:
-//             if(isArr)
-//                 return symbol_table[name].data.arr[index];
-//             else
-//                 return symbol_table[name].data.boolean;
-
-//         default:
-//             printf("\n ERROR: variable %s is not an int, array or boolean\n", name);
-//     }
-
-//     return 0;
-// }
 
 
 node* createCopyNode(node* n){
@@ -187,25 +207,231 @@ int evaluate(node* n){
     return n->val;
 }
 
-int evaluateOp(char* op, int x, int y){
-    if(strcmp(op, "+") == 0) return x+y;
-    else if(strcmp(op, "-") == 0)   return y-x;   //because of unary. not sure
-    else if(strcmp(op, "*") == 0)   return x*y;
-    else if(strcmp(op, "/") == 0)   return x/y;
-    else if(strcmp(op, ">") == 0)   { if(x>y)return 1; else return 0; }
-    else if(strcmp(op, "<") == 0)   { if(x<y)return 1; else return 0; }
-    else if(strcmp(op, ">=") == 0)  { if(x>=y)return 1; else return 0; }
-    else if(strcmp(op, "<=") == 0)  { if(x<=y)return 1; else return 0; }
-    else if(strcmp(op, "==") == 0)  { if(x==y)return 1; else return 0; }
-    else if(strcmp(op, "!=") == 0)  { if(x!=y)return 1; else return 0; }
-    else if(strcmp(op, "++") == 0)  return x+1;
-   
-   return 0;
-}
-// update_var(tree->child->name, evaluate_expr(tree->child->next));
 
-int evaluate_expr(node* tree){
-    if(tree == nullptr) return 0;
+
+struct SymbolEntry evaluateOp(char* op, struct SymbolEntry x, struct SymbolEntry y){
+    struct SymbolEntry expr_val;
+    expr_val.type = _INT_;
+    expr_val.data.num = 0;
+
+    if(strcmp(op, "+") == 0) {
+        expr_val.type = x.type;
+        if(x.type == _INT_){
+            expr_val.data.num = x.data.num + y.data.num;
+        }
+        else if(x.type == _FLOAT_){
+            expr_val.data.fnum = x.data.fnum + y.data.fnum;
+        }
+        
+        return expr_val;
+    }
+    // else if(strcmp(op, "-") == 0)   return y-x;   //because of unary. not sure
+    else if(strcmp(op, "-") == 0) {
+        expr_val.type = x.type;
+        if(x.type == _INT_){
+            expr_val.data.num = y.data.num - x.data.num;
+        }
+        else if(x.type == _FLOAT_){
+            expr_val.data.fnum = y.data.fnum - x.data.fnum;
+        }
+        
+        return expr_val;
+    }
+    else if(strcmp(op, "*") == 0) {
+        expr_val.type = x.type;
+        if(x.type == _INT_){
+            expr_val.data.num = x.data.num * y.data.num;
+        }
+        else if(x.type == _FLOAT_){
+            expr_val.data.fnum = x.data.fnum * y.data.fnum;
+        }
+        
+        return expr_val;
+    }
+    else if(strcmp(op, "/") == 0) {
+        expr_val.type = x.type;
+        if(x.type == _INT_){
+            expr_val.data.num = x.data.num / y.data.num;
+        }
+        else if(x.type == _FLOAT_){
+            expr_val.data.fnum = x.data.fnum / y.data.fnum;
+        }
+        
+        return expr_val;
+    }
+    else if(strcmp(op, ">") == 0) {
+        expr_val.type = _INT_;
+        if(x.type == _INT_){
+            if(x.data.num > y.data.num){
+                expr_val.type = _INT_;
+                expr_val.data.num = 1;
+            }
+            else{
+                expr_val.type = _INT_;
+                expr_val.data.num = 0;
+            }
+        }
+        else if(x.type == _FLOAT_){
+            if(x.data.fnum > y.data.fnum){
+                expr_val.type = _INT_;
+                expr_val.data.num = 1;
+            }
+            else{
+                expr_val.type = _INT_;
+                expr_val.data.num = 0;
+            }
+        }
+        
+        return expr_val;
+    }
+    else if(strcmp(op, "<") == 0) {
+        expr_val.type = _INT_;
+        if(x.type == _INT_){
+            if(x.data.num < y.data.num){
+                expr_val.type = _INT_;
+                expr_val.data.num = 1;
+            }
+            else{
+                expr_val.type = _INT_;
+                expr_val.data.num = 0;
+            }
+        }
+        else if(x.type == _FLOAT_){
+            if(x.data.fnum < y.data.fnum){
+                expr_val.type = _INT_;
+                expr_val.data.num = 1;
+            }
+            else{
+                expr_val.type = _INT_;
+                expr_val.data.num = 0;
+            }
+        }
+        
+        return expr_val;
+    }
+    else if(strcmp(op, ">=") == 0) {
+        expr_val.type = _INT_;
+        if(x.type == _INT_){
+            if(x.data.num >= y.data.num){
+                expr_val.type = _INT_;
+                expr_val.data.num = 1;
+            }
+            else{
+                expr_val.type = _INT_;
+                expr_val.data.num = 0;
+            }
+        }
+        else if(x.type == _FLOAT_){
+            if(x.data.fnum >= y.data.fnum){
+                expr_val.type = _INT_;
+                expr_val.data.num = 1;
+            }
+            else{
+                expr_val.type = _INT_;
+                expr_val.data.num = 0;
+            }
+        }
+        
+        return expr_val;
+    }
+    else if(strcmp(op, "<=") == 0) {
+        expr_val.type = _INT_;
+        if(x.type == _INT_){
+            if(x.data.num <= y.data.num){
+                expr_val.type = _INT_;
+                expr_val.data.num = 1;
+            }
+            else{
+                expr_val.type = _INT_;
+                expr_val.data.num = 0;
+            }
+        }
+        else if(x.type == _FLOAT_){
+            if(x.data.fnum <= y.data.fnum){
+                expr_val.type = _INT_;
+                expr_val.data.num = 1;
+            }
+            else{
+                expr_val.type = _INT_;
+                expr_val.data.num = 0;
+            }
+        }
+        
+        return expr_val;
+    }
+    else if(strcmp(op, "==") == 0) {
+        expr_val.type = _INT_;
+        if(x.type == _INT_){
+            if(x.data.num == y.data.num){
+                expr_val.type = _INT_;
+                expr_val.data.num = 1;
+            }
+            else{
+                expr_val.type = _INT_;
+                expr_val.data.num = 0;
+            }
+        }
+        else if(x.type == _FLOAT_){
+            if(x.data.fnum == y.data.fnum){
+                expr_val.type = _INT_;
+                expr_val.data.num = 1;
+            }
+            else{
+                expr_val.type = _INT_;
+                expr_val.data.num = 0;
+            }
+        }
+        
+        return expr_val;
+    }
+    else if(strcmp(op, "!=") == 0) {
+        expr_val.type = _INT_;
+        if(x.type == _INT_){
+            if(x.data.num != y.data.num){
+                expr_val.type = _INT_;
+                expr_val.data.num = 1;
+            }
+            else{
+                expr_val.type = _INT_;
+                expr_val.data.num = 0;
+            }
+        }
+        else if(x.type == _FLOAT_){
+            if(x.data.fnum != y.data.fnum){
+                expr_val.type = _INT_;
+                expr_val.data.num = 1;
+            }
+            else{
+                expr_val.type = _INT_;
+                expr_val.data.num = 0;
+            }
+        }
+        
+        return expr_val;
+    }
+    else if(strcmp(op, "++") == 0) {
+        expr_val.type = x.type;
+        if(x.type == _INT_){
+            expr_val.data.num = x.data.num + 1;
+        }
+        else if(x.type == _FLOAT_){
+            expr_val.data.fnum = x.data.fnum + 1;
+        }
+        
+        return expr_val;
+    }
+   
+   return expr_val;
+}
+
+
+
+struct SymbolEntry evaluate_expr(node* tree){
+    struct SymbolEntry expr_val;
+    expr_val.type = _INT_;
+    expr_val.data.num = 0;
+    
+    if(tree == nullptr) return expr_val;
 
     switch(tree->id_type){
         case VARIABLE:
@@ -213,11 +439,12 @@ int evaluate_expr(node* tree){
                 // array
                 if(tree->child->next){
                     // 2d array
-                    return get_variable_value(tree->name, evaluate_expr(tree->child)+1, evaluate_expr(tree->child->next));
+                    return get_variable_value(tree->name, evaluate_expr(tree->child).data.num+1, evaluate_expr(tree->child->next).data.num);
                 }
                 else {
                     // 1d array
-                    return get_variable_value(tree->name, -1, evaluate_expr(tree->child));
+
+                    return get_variable_value(tree->name, -1, evaluate_expr(tree->child).data.num);
                 }
             }
             else{
@@ -226,27 +453,36 @@ int evaluate_expr(node* tree){
             }
         
         case NUMBER:
-            return tree->val;
+            expr_val.type = _INT_;
+            expr_val.data.num = tree->val;
+            return expr_val;
+        case FLOATNUMBER:
+            expr_val.type = _FLOAT_;
+            expr_val.data.fnum = tree->fval;
+            // printf("xxx %f %f xxx", tree->fval, expr_val.data.fnum);
+            return expr_val;
         
         case OP:
-            if(strcmp(tree->name, "++") == 0) {
-                int temp = evaluate_expr(tree->child);
-                if(tree->child->child != nullptr){
-                    // array element
-                    update_var(tree->child->name, temp+1, 1, evaluate_expr(tree->child->child));
-                }
-                else
-                    update_var(tree->child->name, temp+1);
+            // if(strcmp(tree->name, "++") == 0) {
+            //     int temp = evaluate_expr(tree->child);
+            //     if(tree->child->child != nullptr){
+            //         // array element
+            //         update_var(tree->child->name, temp+1, 1, evaluate_expr(tree->child->child));
+            //     }
+            //     else
+            //         update_var(tree->child->name, temp+1);
 
-                return temp;
-            }
+            //     return temp;
+            // }
             return evaluateOp(tree->name, evaluate_expr(tree->child), evaluate_expr(tree->child->next));
         
         default:
             printf("\nERROR: SOMETHING OTHER THAN VARIABLE, NUMBER OR OPERATOR IS PRESENT IN EXPRESSION\n");
     }
-    return 0;
+    return expr_val;
 }
+
+
 
 node* createOp(char* op, node* operand1, node* operand2){
     node* newNode = new node;
@@ -269,6 +505,20 @@ node* createNum(int val){
     newNode->child = nullptr;
     newNode->next = nullptr;
     newNode->val = val;
+    newNode->rightMostChld = nullptr;
+    return newNode;
+}
+
+node* createFloat(float val){
+    node* newNode = new node;
+    newNode->id_type = FLOATNUMBER;
+    newNode->fval = val;
+
+    newNode->name = "#";
+    newNode->child = nullptr;
+    newNode->next = nullptr;
+    newNode->val = -11111;
+    
     newNode->rightMostChld = nullptr;
     return newNode;
 }

@@ -34,25 +34,44 @@ int execute_stmt(node* tree){
             // array element
             if(tree->child->child->next != nullptr) {
                 // 2d array
-                update_var(tree->child->name, evaluate_expr(tree->child->next), evaluate_expr(tree->child->child)+1, evaluate_expr(tree->child->child->next));
+                if(evaluate_expr(tree->child->next).type == _INT_)
+                    update_var(tree->child->name, evaluate_expr(tree->child->next).data.num, evaluate_expr(tree->child->child).data.num+1, evaluate_expr(tree->child->child->next).data.num);
+                else if(evaluate_expr(tree->child->next).type == _FLOAT_)
+                    update_var(tree->child->name, evaluate_expr(tree->child->next).data.fnum, evaluate_expr(tree->child->child).data.num+1, evaluate_expr(tree->child->child->next).data.num);
             }
             else {
                 // 1d array
-                update_var(tree->child->name, evaluate_expr(tree->child->next), -1, evaluate_expr(tree->child->child));
+                if(evaluate_expr(tree->child->next).type == _INT_)
+                    update_var(tree->child->name, evaluate_expr(tree->child->next).data.num, -1, evaluate_expr(tree->child->child).data.num);
+                else if(evaluate_expr(tree->child->next).type == _FLOAT_)
+                    update_var(tree->child->name, evaluate_expr(tree->child->next).data.fnum, -1, evaluate_expr(tree->child->child).data.num);
             }
         }
-        else
-            update_var(tree->child->name, evaluate_expr(tree->child->next));
+        else{
+            if(evaluate_expr(tree->child->next).type == _INT_)
+                update_var(tree->child->name, evaluate_expr(tree->child->next).data.num);
+            else if(evaluate_expr(tree->child->next).type == _FLOAT_){
+                update_var(tree->child->name, evaluate_expr(tree->child->next).data.fnum);
+            }
+        }
 
         
     }
     else if(tree->id_type==FUNC){
         if(strcmp(tree->name, "WRITE") == 0){
-            printf("\n=> %d\n", evaluate_expr(tree->child->child)); // not sure. need to change
+            struct SymbolEntry val = evaluate_expr(tree->child->child);
+            // printf(" XXX %s  ", tree->child->child->name);
+            
+            if(val.type == _INT_){
+                printf("\n=> %d\n", val.data.num); // not sure. need to change
+            }
+            else if(val.type == _FLOAT_) {
+                printf("\n=> %f\n", val.data.fnum); // not sure. need to change
+            }
         }
     }
     else if(tree->id_type==IF_STMNT){
-        if(evaluate_expr(tree->child)){
+        if(evaluate_expr(tree->child).data.num){
             int loopStatus = execute_stmt_list(tree->child->next);
             return loopStatus;
         }
@@ -68,7 +87,7 @@ int execute_stmt(node* tree){
         // print_stmt(tree->child);
 
         execute_stmt(tree->child);
-        while(evaluate_expr(tree->child->next)){
+        while(evaluate_expr(tree->child->next).data.num){
             int loopStatus = execute_stmt_list(tree->child->next->next->next);    // statements inside for loop
             if(loopStatus == 1) break;  // it hit a break statement
             execute_stmt(tree->child->next->next);    // for loop increment part
@@ -79,7 +98,7 @@ int execute_stmt(node* tree){
             int loopStatus = execute_stmt_list(tree->child);    // statements inside for loop
             if(loopStatus == 1) break;  // it hit a break statement
         }
-        while( evaluate_expr(tree->child->next) );
+        while( evaluate_expr(tree->child->next).data.num );
     }
     else if(tree->id_type==BREAK_STMNT)       return 1;
     else if(tree->id_type==CONTINUE_STMNT)    return 2;
@@ -122,23 +141,41 @@ void declareVar(node* tree, _DATA_TYPES_ varDataType){
             if(tree->child != nullptr){
                 if(tree->child->next != nullptr) {
                     // 2d array
-                    varSymbolEntry.data.arr2d = (int**) malloc(sizeof(int*) * evaluate_expr(tree->child));
-                    for(int i=0; i<evaluate_expr(tree->child); i++){
-                        varSymbolEntry.data.arr2d[i] = (int*)malloc(evaluate_expr(tree->child->next) * sizeof(int));
+                    varSymbolEntry.data.arr2d = (int**) malloc(sizeof(int*) * evaluate_expr(tree->child).data.num);
+                    for(int i=0; i<evaluate_expr(tree->child).data.num; i++){
+                        varSymbolEntry.data.arr2d[i] = (int*)malloc(evaluate_expr(tree->child->next).data.num * sizeof(int));
                     }
                 }
                 else {
                     // 1d array
-                    varSymbolEntry.data.arr = (int*) malloc(sizeof(int) * evaluate_expr(tree->child));
+                    varSymbolEntry.data.arr = (int*) malloc(sizeof(int) * evaluate_expr(tree->child).data.num);
                 }
             }
             else 
                 varSymbolEntry.data.num = 0;
             break;
         
+        case _FLOAT_:
+            if(tree->child != nullptr){
+                if(tree->child->next != nullptr) {
+                    // 2d array
+                    varSymbolEntry.data.farr2d = (float**) malloc(sizeof(float*) * evaluate_expr(tree->child).data.num);
+                    for(int i=0; i<evaluate_expr(tree->child).data.num; i++){
+                        varSymbolEntry.data.farr2d[i] = (float*)malloc(evaluate_expr(tree->child->next).data.num * sizeof(float));
+                    }
+                }
+                else {
+                    // 1d array
+                    varSymbolEntry.data.farr = (float*) malloc(sizeof(float) * evaluate_expr(tree->child).data.num);
+                }
+            }
+            else 
+                varSymbolEntry.data.fnum = 0;
+            break;
+        
         case _BOOLEAN_:
             if(tree->child != nullptr)
-                varSymbolEntry.data.arr = (int*) malloc(sizeof(int) * evaluate_expr(tree->child));
+                varSymbolEntry.data.arr = (int*) malloc(sizeof(int) * evaluate_expr(tree->child).data.num);
             else 
                 varSymbolEntry.data.boolean = 0;
             break;
