@@ -1,0 +1,19 @@
+decl
+	integer array[10];
+	integer key;
+	integer mid, temp;
+	integer test, i, l, r;
+	integer result;
+enddecl
+
+begin
+  
+  l = 1;
+  do {
+    l = l*2;
+    i = i+1;
+  } while (i < 4);
+
+  write(l);
+	
+end
