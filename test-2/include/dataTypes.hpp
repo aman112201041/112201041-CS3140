@@ -40,13 +40,15 @@ typedef struct node{
 enum _DATA_TYPES_{
     _INT_,
     _ARRAY_,
-    _BOOLEAN_
+    _BOOLEAN_,
+    _ARRAY2D_,
 };
 
 union geek { 
     int num; 
     int* arr;
     int boolean;
+    int** arr2d;
 };
 
 struct SymbolEntry {
@@ -60,13 +62,17 @@ map<string, _DATA_TYPES_> variable_types;
 
 
 void update_var(char* name, int val, int isArr=0, int index=0){
-    if(isArr){
+    if(isArr == -1){
         symbol_table[name].data.arr[index] = val;
     }
-    else 
+    else if(isArr == 0){
         symbol_table[name].data.num = val;      // not sure. to change
-}
+    }
+    else {
+        symbol_table[name].data.arr2d[isArr-1][index] = val;
+    }
 
+}
 
 int get_variable_value(char* name, int isArr=0, int index=0){
     if (symbol_table.find(name) == symbol_table.end()){
@@ -76,10 +82,15 @@ int get_variable_value(char* name, int isArr=0, int index=0){
 
     switch(symbol_table[name].type){
         case _INT_:
-            if(isArr)
+            if(isArr == -1){
                 return symbol_table[name].data.arr[index];
-            else
+            }
+            else if(isArr == 0){
                 return symbol_table[name].data.num;
+            }
+            else{
+                return symbol_table[name].data.arr2d[isArr-1][index];
+            }
         
         case _BOOLEAN_:
             if(isArr)
@@ -93,6 +104,33 @@ int get_variable_value(char* name, int isArr=0, int index=0){
 
     return 0;
 }
+
+
+// int get_variable_value(char* name, int isArr=0, int index=0){
+//     if (symbol_table.find(name) == symbol_table.end()){
+//         printf("\n ERROR: variable %s not found in symbol table\n", name);
+//         return 0;
+//     }
+
+//     switch(symbol_table[name].type){
+//         case _INT_:
+//             if(isArr)
+//                 return symbol_table[name].data.arr[index];
+//             else
+//                 return symbol_table[name].data.num;
+        
+//         case _BOOLEAN_:
+//             if(isArr)
+//                 return symbol_table[name].data.arr[index];
+//             else
+//                 return symbol_table[name].data.boolean;
+
+//         default:
+//             printf("\n ERROR: variable %s is not an int, array or boolean\n", name);
+//     }
+
+//     return 0;
+// }
 
 
 node* createCopyNode(node* n){
@@ -173,7 +211,14 @@ int evaluate_expr(node* tree){
         case VARIABLE:
             if(tree->child){
                 // array
-                return get_variable_value(tree->name, 1, evaluate_expr(tree->child));
+                if(tree->child->next){
+                    // 2d array
+                    return get_variable_value(tree->name, evaluate_expr(tree->child)+1, evaluate_expr(tree->child->next));
+                }
+                else {
+                    // 1d array
+                    return get_variable_value(tree->name, -1, evaluate_expr(tree->child));
+                }
             }
             else{
                 // non array

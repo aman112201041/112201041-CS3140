@@ -18,6 +18,8 @@ int execute_stmt_list(node* tree);
 //         symbol_table[name].data.num = val;      // not sure. to change
 // }
 
+
+
 int execute_stmt(node* tree){
     // RETURNS 1 IF IT HIT A BREAK STATEMENT
     // AND RETURN 2 IF HIT A CONTINUE STATEMETN
@@ -30,10 +32,19 @@ int execute_stmt(node* tree){
 
         if(tree->child->child != nullptr){
             // array element
-            update_var(tree->child->name, evaluate_expr(tree->child->next), 1, evaluate_expr(tree->child->child));
+            if(tree->child->child->next != nullptr) {
+                // 2d array
+                update_var(tree->child->name, evaluate_expr(tree->child->next), evaluate_expr(tree->child->child)+1, evaluate_expr(tree->child->child->next));
+            }
+            else {
+                // 1d array
+                update_var(tree->child->name, evaluate_expr(tree->child->next), -1, evaluate_expr(tree->child->child));
+            }
         }
         else
             update_var(tree->child->name, evaluate_expr(tree->child->next));
+
+        
     }
     else if(tree->id_type==FUNC){
         if(strcmp(tree->name, "WRITE") == 0){
@@ -109,7 +120,17 @@ void declareVar(node* tree, _DATA_TYPES_ varDataType){
     switch(varDataType){
         case _INT_:
             if(tree->child != nullptr){
-                varSymbolEntry.data.arr = (int*) malloc(sizeof(int) * evaluate_expr(tree->child));
+                if(tree->child->next != nullptr) {
+                    // 2d array
+                    varSymbolEntry.data.arr2d = (int**) malloc(sizeof(int*) * evaluate_expr(tree->child));
+                    for(int i=0; i<evaluate_expr(tree->child); i++){
+                        varSymbolEntry.data.arr2d[i] = (int*)malloc(evaluate_expr(tree->child->next) * sizeof(int));
+                    }
+                }
+                else {
+                    // 1d array
+                    varSymbolEntry.data.arr = (int*) malloc(sizeof(int) * evaluate_expr(tree->child));
+                }
             }
             else 
                 varSymbolEntry.data.num = 0;

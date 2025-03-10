@@ -1,5 +1,6 @@
 decl
 	integer array[10];
+  integer abcd[3][3];
 	integer key;
 	integer mid, temp;
 	integer test, i, l, r;
@@ -8,12 +9,33 @@ enddecl
 
 begin
   
-  l = 1;
-  do {
-    l = l*2;
-    i = i+1;
-  } while (i < 4);
+  for(i=0; i<3; i++){
+    for(l=0; l<3; l++){
+      abcd[i][l] = i+l;
+    }
+  }
 
-  write(l);
+  i=1;
+  l=1;
+
+  do{
+    l = 0;
+    do{
+      write(abcd[i][l]);
+      l = l+1;
+    }
+    while(l<3);
+    i = i+1;
+  }
+  while(i<3);
+
+
+  r = 0;
+  do{
+    write(r+100);
+  }
+  while(r>0);
+
+  
 	
 end

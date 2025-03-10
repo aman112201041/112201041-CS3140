@@ -112,6 +112,11 @@
 												$$ = $1;
 												pushChildNode($$, createNum($3));
 											}
+		|	Lid '[' NUM ']' '[' NUM ']'		{
+												$$ = $1;
+												pushChildNode($$, createNum($3));
+												pushChildNode($$, createNum($6));
+											}
 		;
 
 	stmt_list:	statement stmt_list				{$$ = createStatement(); pushNextNode($$, $2); pushChildNode($$, $1);}
@@ -194,7 +199,7 @@
 
 																										pushChildNode($$, StmntList);
 																									}
-		|		DO '{' stmt_list '}' WHILE '(' expr ')'               								{ 
+		|		DO '{' stmt_list '}' WHILE '(' expr ')' ';'              							{ 
 																										$$ = createWhileStmnt();
 																										
 																										node* StmntList = createStmntList();
@@ -232,11 +237,16 @@
 		;
 	
 	
-	var_expr:	VAR							{ $$ = createVar($1); }
-		|	var_expr '[' expr ']'			{
-												$$ = $1;
-												pushChildNode($$, $3);
-											}
+	var_expr:	VAR									{ $$ = createVar($1); }
+		|	var_expr '[' expr ']'					{
+														$$ = $1;
+														pushChildNode($$, $3);
+													}
+		|	var_expr '[' expr ']' '[' expr ']'		{
+														$$ = $1;
+														pushChildNode($$, $3);
+														pushChildNode($$, $6);
+													}
 		;
 
 
