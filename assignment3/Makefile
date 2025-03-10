@@ -8,7 +8,7 @@ all:
 	lex ./src/compiler.l
 	mv lex.yy.c ./src
 
-	
+	# clang++ -fsanitize=address -g -o ./bin/compiler ./src/lex.yy.c ./src/y.tab.c -Wno-c++11-compat-deprecated-writable-strings -Wno-deprecated
 	g++ -o ./bin/compiler ./src/lex.yy.c ./src/y.tab.c -Wno-c++11-compat-deprecated-writable-strings -Wno-deprecated
 
 

@@ -4,19 +4,19 @@
 #include <stdio.h>
 #include <string.h>
 #include "./dataTypes.hpp"
-#include "./printTree.hpp"
+#include "./printTree2.hpp"
 
 int execute_stmt_list(node* tree);
 
 
 
-void update_var(char* name, int val, int isArr=0, int index=0){
-    if(isArr){
-        symbol_table[name].data.arr[index] = val;
-    }
-    else 
-        symbol_table[name].data.num = val;      // not sure. to change
-}
+// void update_var(char* name, int val, int isArr=0, int index=0){
+//     if(isArr){
+//         symbol_table[name].data.arr[index] = val;
+//     }
+//     else 
+//         symbol_table[name].data.num = val;      // not sure. to change
+// }
 
 int execute_stmt(node* tree){
     // RETURNS 1 IF IT HIT A BREAK STATEMENT
@@ -53,8 +53,8 @@ int execute_stmt(node* tree){
         }
     }
     else if(tree->id_type==FOR_STMNT){
-        printf("------------------\n");
-        print_stmt(tree->child);
+        // printf("------------------\n");
+        // print_stmt(tree->child);
 
         execute_stmt(tree->child);
         while(evaluate_expr(tree->child->next)){

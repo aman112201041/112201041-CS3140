@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <string.h>
+// #include "./executeTree.hpp"
 
 
 enum identifier{
@@ -56,6 +57,16 @@ map<string, SymbolEntry> symbol_table;
 
 map<string, _DATA_TYPES_> variable_types;
 
+
+void update_var(char* name, int val, int isArr=0, int index=0){
+    if(isArr){
+        symbol_table[name].data.arr[index] = val;
+    }
+    else 
+        symbol_table[name].data.num = val;      // not sure. to change
+}
+
+
 int get_variable_value(char* name, int isArr=0, int index=0){
     if (symbol_table.find(name) == symbol_table.end()){
         printf("\n ERROR: variable %s not found in symbol table\n", name);
@@ -83,6 +94,21 @@ int get_variable_value(char* name, int isArr=0, int index=0){
 }
 
 
+node* createCopyNode(node* n){
+    if(n==nullptr) return nullptr;
+    
+    node* newNode = new node;
+    
+    newNode->val = n->val;
+    newNode->id_type = n->id_type;
+    newNode->name = strdup(n->name);
+    
+    newNode->child = createCopyNode(n->child);
+    newNode->next = createCopyNode(n->next);
+    newNode->rightMostChld = createCopyNode(n->rightMostChld);
+
+    return newNode;
+}
 
 node* createStatement(){
     node* newNode = new node;
@@ -133,9 +159,11 @@ int evaluateOp(char* op, int x, int y){
     else if(strcmp(op, "<=") == 0)  { if(x<=y)return 1; else return 0; }
     else if(strcmp(op, "==") == 0)  { if(x==y)return 1; else return 0; }
     else if(strcmp(op, "!=") == 0)  { if(x!=y)return 1; else return 0; }
+    else if(strcmp(op, "++") == 0)  return x+1;
    
    return 0;
 }
+// update_var(tree->child->name, evaluate_expr(tree->child->next));
 
 int evaluate_expr(node* tree){
     if(tree == nullptr) return 0;
@@ -155,6 +183,17 @@ int evaluate_expr(node* tree){
             return tree->val;
         
         case OP:
+            if(strcmp(tree->name, "++") == 0) {
+                int temp = evaluate_expr(tree->child);
+                if(tree->child->child != nullptr){
+                    // array element
+                    update_var(tree->child->name, temp+1, 1, evaluate_expr(tree->child->child));
+                }
+                else
+                    update_var(tree->child->name, temp+1);
+
+                return temp;
+            }
             return evaluateOp(tree->name, evaluate_expr(tree->child), evaluate_expr(tree->child->next));
         
         default:
@@ -244,9 +283,10 @@ node* createAssign(node* var, node* expr){
     if(var)
         newNode->child->next = expr;
 
-    if(expr)
-        newNode->rightMostChld = expr->rightMostChld;       // not sure!!!
+    // if(expr)
+    //     newNode->rightMostChld = expr->rightMostChld;       // not sure!!!
     // newNode->rightMostChld = newNode->child->next;       // not sure!!!
+    newNode->rightMostChld = expr;
     
     return newNode;
 }

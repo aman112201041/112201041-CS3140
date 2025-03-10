@@ -51,6 +51,8 @@ continue						{return CONTINUE;}
 
 [-+*/=()><;,\{\}\[\]\%]         {return yytext[0];}
 
+"++"							{return INCREMENT;}
+
 ">="							{ return GREATERTHANOREQUAL; }
 "<="							{ return LESSTHANOREQUAL; }
 "=="							{ return EQUALEQUAL; }

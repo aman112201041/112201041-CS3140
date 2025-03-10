@@ -9,7 +9,7 @@
 	#include <iostream>
 	using namespace std;
 	#include "../include/dataTypes.hpp"
-	#include "../include/printTree.hpp"
+	#include "../include/printTree2.hpp"
 	#include "../include/executeTree.hpp"
 
 	
@@ -37,6 +37,7 @@
 %token MAIN RETURN
 
 %token BREAK CONTINUE
+%token INCREMENT
 
 
 %left '<' '>'
@@ -142,6 +143,10 @@
 												//symbol_table[$1->name].second=evaluate($3); 
 												$$=createAssign($1, $3);
 											}
+				|	var_expr INCREMENT		{ 
+												$$=createAssign($1, createOp("+", createCopyNode($1), createNum(1))); 
+												
+											}
 				|		/* NULL */			{ $$=createAssign(NULL, NULL); }
 		;
 
@@ -210,6 +215,8 @@
 		|	expr LESSTHANOREQUAL expr 		{ $$ = createOp("<=", $1, $3); }
 		|	expr GREATERTHANOREQUAL expr 	{ $$ = createOp(">=", $1, $3); }
 		|	expr NOTEQUAL expr 				{ $$ = createOp("!=", $1, $3); }
+		
+		|	var_expr INCREMENT				{ $$ = createOp("++", $1, NULL); }
 
 
 		;

@@ -68,8 +68,9 @@
      RETURN = 284,
      BREAK = 285,
      CONTINUE = 286,
-     NUM = 287,
-     VAR = 288
+     INCREMENT = 287,
+     NUM = 288,
+     VAR = 289
    };
 #endif
 /* Tokens.  */
@@ -102,8 +103,9 @@
 #define RETURN 284
 #define BREAK 285
 #define CONTINUE 286
-#define NUM 287
-#define VAR 288
+#define INCREMENT 287
+#define NUM 288
+#define VAR 289
 
 
 
@@ -117,7 +119,7 @@ typedef union YYSTYPE
 	struct node* tree;
 }
 /* Line 1529 of yacc.c.  */
-#line 121 "y.tab.h"
+#line 123 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

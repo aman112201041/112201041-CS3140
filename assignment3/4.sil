@@ -1,26 +1,36 @@
-decl 
-  integer arr[10];
-  integer key, i;
-  integer l, r, mid, result;
+decl
+	integer array[10];
+	integer key;
+	integer mid, temp;
+	integer test, i, l, r;
+	integer result;
 enddecl
+
 begin
-
-
-  for(i = 0; i < 10; i = i + 1){
-    arr[i] = i + 10;
+  test = 0;
+  i = test++;
+  write(test);
+  for (i = 0; i < 10; i++) {
+		array[i] = i+10;
   }
-
-
-  for(i=0; ; ){
-    if(i>10) then
-      break;
+	
+  key = array[5];
+  l = 0;
+  r = 9;
+         
+  for ( ;(l < r); ) { 
+    mid = (l + r) / 2;
+    
+    if (array[mid] == key) then
+        result = mid;
+        break;
+    else if (array[mid] < key) then
+            l = mid+1;
+        else 
+            r = mid-1;
+        endif
     endif
-
-    i = i+1;
-    write(i);
-  }
-
-  write(i);
-
-
+	}
+	
+  write(result);
 end
