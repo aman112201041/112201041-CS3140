@@ -503,11 +503,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    62,    62,    76,    82,    89,    90,    93,   100,   101,
-     104,   105,   108,   111,   117,   118,   121,   122,   123,   124,
-     125,   126,   129,   132,   142,   146,   150,   153,   161,   173,
-     184,   200,   201,   202,   203,   204,   205,   207,   208,   209,
-     210,   212,   213,   214,   215,   216,   217,   219,   225,   226
+       0,    62,    62,    78,    84,    91,    92,    95,   102,   103,
+     106,   107,   110,   113,   119,   120,   123,   124,   125,   126,
+     127,   128,   131,   134,   144,   148,   152,   155,   163,   175,
+     186,   202,   203,   204,   205,   206,   207,   209,   210,   211,
+     212,   214,   215,   216,   217,   218,   219,   221,   227,   228
 };
 #endif
 
@@ -1509,11 +1509,13 @@ yyreduce:
 												print_tree(codeTree);
 
 												execute_tree(codeTree);
+
+												print_symbol_table();
 											}
     break;
 
   case 3:
-#line 76 "./src/compiler.y"
+#line 78 "./src/compiler.y"
     {
 												node* StmntList = createStmntList();
 												pushChildNode(StmntList, (yyvsp[(2) - (3)].tree));
@@ -1522,7 +1524,7 @@ yyreduce:
     break;
 
   case 4:
-#line 82 "./src/compiler.y"
+#line 84 "./src/compiler.y"
     {
 												tempNode = createDecl();
 												pushChildNode(tempNode, (yyvsp[(2) - (3)].tree));
@@ -1531,17 +1533,17 @@ yyreduce:
     break;
 
   case 5:
-#line 89 "./src/compiler.y"
+#line 91 "./src/compiler.y"
     {(yyval.tree) = (yyvsp[(1) - (1)].tree);}
     break;
 
   case 6:
-#line 90 "./src/compiler.y"
+#line 92 "./src/compiler.y"
     {pushNextNode((yyvsp[(1) - (2)].tree), (yyvsp[(2) - (2)].tree)); (yyval.tree) = (yyvsp[(1) - (2)].tree); }
     break;
 
   case 7:
-#line 93 "./src/compiler.y"
+#line 95 "./src/compiler.y"
     { 
 												(yyval.tree)=createLdecl_list();
 												pushChildNode((yyval.tree), createKeyword("dataType", var_type));
@@ -1550,34 +1552,34 @@ yyreduce:
     break;
 
   case 8:
-#line 100 "./src/compiler.y"
+#line 102 "./src/compiler.y"
     { var_type = _INT_; }
     break;
 
   case 9:
-#line 101 "./src/compiler.y"
+#line 103 "./src/compiler.y"
     { var_type = _BOOLEAN_; }
     break;
 
   case 10:
-#line 104 "./src/compiler.y"
+#line 106 "./src/compiler.y"
     {(yyval.tree) = (yyvsp[(1) - (1)].tree);}
     break;
 
   case 11:
-#line 105 "./src/compiler.y"
+#line 107 "./src/compiler.y"
     {pushNextNode((yyvsp[(1) - (3)].tree), (yyvsp[(3) - (3)].tree)); (yyval.tree) = (yyvsp[(1) - (3)].tree);}
     break;
 
   case 12:
-#line 108 "./src/compiler.y"
+#line 110 "./src/compiler.y"
     { 
 												(yyval.tree) = createVar((yyvsp[(1) - (1)].id));
 											}
     break;
 
   case 13:
-#line 111 "./src/compiler.y"
+#line 113 "./src/compiler.y"
     {
 												(yyval.tree) = (yyvsp[(1) - (4)].tree);
 												pushChildNode((yyval.tree), createNum((yyvsp[(3) - (4)].num)));
@@ -1585,52 +1587,52 @@ yyreduce:
     break;
 
   case 14:
-#line 117 "./src/compiler.y"
+#line 119 "./src/compiler.y"
     {(yyval.tree) = createStatement(); pushNextNode((yyval.tree), (yyvsp[(2) - (2)].tree)); pushChildNode((yyval.tree), (yyvsp[(1) - (2)].tree));}
     break;
 
   case 15:
-#line 118 "./src/compiler.y"
+#line 120 "./src/compiler.y"
     {(yyval.tree) = NULL;}
     break;
 
   case 16:
-#line 121 "./src/compiler.y"
-    { (yyval.tree) = (yyvsp[(1) - (2)].tree); }
-    break;
-
-  case 17:
-#line 122 "./src/compiler.y"
-    { }
-    break;
-
-  case 18:
 #line 123 "./src/compiler.y"
     { (yyval.tree) = (yyvsp[(1) - (2)].tree); }
     break;
 
-  case 19:
+  case 17:
 #line 124 "./src/compiler.y"
+    { }
+    break;
+
+  case 18:
+#line 125 "./src/compiler.y"
+    { (yyval.tree) = (yyvsp[(1) - (2)].tree); }
+    break;
+
+  case 19:
+#line 126 "./src/compiler.y"
     { (yyval.tree) = (yyvsp[(1) - (1)].tree); }
     break;
 
   case 20:
-#line 125 "./src/compiler.y"
+#line 127 "./src/compiler.y"
     { (yyval.tree) = createBreak(); }
     break;
 
   case 21:
-#line 126 "./src/compiler.y"
+#line 128 "./src/compiler.y"
     { (yyval.tree) = createContinue(); }
     break;
 
   case 22:
-#line 129 "./src/compiler.y"
+#line 131 "./src/compiler.y"
     {  }
     break;
 
   case 23:
-#line 132 "./src/compiler.y"
+#line 134 "./src/compiler.y"
     { 
 															(yyval.tree)=createFunc("WRITE"); 
 															// pushNextNode($$, $3);
@@ -1640,7 +1642,7 @@ yyreduce:
     break;
 
   case 24:
-#line 142 "./src/compiler.y"
+#line 144 "./src/compiler.y"
     { 
 												//symbol_table[$1->name].second=evaluate($3); 
 												(yyval.tree)=createAssign((yyvsp[(1) - (3)].tree), (yyvsp[(3) - (3)].tree));
@@ -1648,7 +1650,7 @@ yyreduce:
     break;
 
   case 25:
-#line 146 "./src/compiler.y"
+#line 148 "./src/compiler.y"
     { 
 												(yyval.tree)=createAssign((yyvsp[(1) - (2)].tree), createOp("+", createCopyNode((yyvsp[(1) - (2)].tree)), createNum(1))); 
 												
@@ -1656,12 +1658,12 @@ yyreduce:
     break;
 
   case 26:
-#line 150 "./src/compiler.y"
+#line 152 "./src/compiler.y"
     { (yyval.tree)=createAssign(NULL, NULL); }
     break;
 
   case 27:
-#line 153 "./src/compiler.y"
+#line 155 "./src/compiler.y"
     { 
 																										(yyval.tree) = createIfStmnt();
 																										pushChildNode((yyval.tree), (yyvsp[(2) - (5)].tree));
@@ -1673,7 +1675,7 @@ yyreduce:
     break;
 
   case 28:
-#line 161 "./src/compiler.y"
+#line 163 "./src/compiler.y"
     { 
 																										(yyval.tree) = createIfStmnt();
 																										pushChildNode((yyval.tree), (yyvsp[(2) - (7)].tree));
@@ -1689,7 +1691,7 @@ yyreduce:
     break;
 
   case 29:
-#line 173 "./src/compiler.y"
+#line 175 "./src/compiler.y"
     { 
 																										(yyval.tree) = createForStmnt();
 																										pushChildNode((yyval.tree), (yyvsp[(3) - (11)].tree));
@@ -1704,7 +1706,7 @@ yyreduce:
     break;
 
   case 30:
-#line 184 "./src/compiler.y"
+#line 186 "./src/compiler.y"
     { 
 																										(yyval.tree) = createForStmnt();
 																										pushChildNode((yyval.tree), (yyvsp[(3) - (10)].tree));
@@ -1721,97 +1723,97 @@ yyreduce:
     break;
 
   case 31:
-#line 200 "./src/compiler.y"
+#line 202 "./src/compiler.y"
     { (yyval.tree) = createNum((yyvsp[(1) - (1)].num)); }
     break;
 
   case 32:
-#line 201 "./src/compiler.y"
+#line 203 "./src/compiler.y"
     {  (yyval.tree) = createOp("-", (yyvsp[(2) - (2)].tree), NULL); }
     break;
 
   case 33:
-#line 202 "./src/compiler.y"
+#line 204 "./src/compiler.y"
     { (yyval.tree) = (yyvsp[(1) - (1)].tree); }
     break;
 
   case 34:
-#line 203 "./src/compiler.y"
+#line 205 "./src/compiler.y"
     { (yyval.tree) = createNum(1); }
     break;
 
   case 35:
-#line 204 "./src/compiler.y"
+#line 206 "./src/compiler.y"
     { (yyval.tree) = createNum(0); }
     break;
 
   case 36:
-#line 205 "./src/compiler.y"
+#line 207 "./src/compiler.y"
     { (yyval.tree) = (yyvsp[(2) - (3)].tree); }
     break;
 
   case 37:
-#line 207 "./src/compiler.y"
+#line 209 "./src/compiler.y"
     { (yyval.tree) = createOp("+", (yyvsp[(1) - (3)].tree), (yyvsp[(3) - (3)].tree)); }
     break;
 
   case 38:
-#line 208 "./src/compiler.y"
+#line 210 "./src/compiler.y"
     { (yyval.tree) = createOp("-", (yyvsp[(3) - (3)].tree), (yyvsp[(1) - (3)].tree)); }
     break;
 
   case 39:
-#line 209 "./src/compiler.y"
+#line 211 "./src/compiler.y"
     { (yyval.tree) = createOp("*", (yyvsp[(1) - (3)].tree), (yyvsp[(3) - (3)].tree)); }
     break;
 
   case 40:
-#line 210 "./src/compiler.y"
+#line 212 "./src/compiler.y"
     { (yyval.tree) = createOp("/", (yyvsp[(1) - (3)].tree), (yyvsp[(3) - (3)].tree)); }
     break;
 
   case 41:
-#line 212 "./src/compiler.y"
+#line 214 "./src/compiler.y"
     { (yyval.tree) = createOp(">", (yyvsp[(1) - (3)].tree), (yyvsp[(3) - (3)].tree)); }
     break;
 
   case 42:
-#line 213 "./src/compiler.y"
+#line 215 "./src/compiler.y"
     { (yyval.tree) = createOp("<", (yyvsp[(1) - (3)].tree), (yyvsp[(3) - (3)].tree)); }
     break;
 
   case 43:
-#line 214 "./src/compiler.y"
+#line 216 "./src/compiler.y"
     { (yyval.tree) = createOp("==", (yyvsp[(1) - (3)].tree), (yyvsp[(3) - (3)].tree)); }
     break;
 
   case 44:
-#line 215 "./src/compiler.y"
+#line 217 "./src/compiler.y"
     { (yyval.tree) = createOp("<=", (yyvsp[(1) - (3)].tree), (yyvsp[(3) - (3)].tree)); }
     break;
 
   case 45:
-#line 216 "./src/compiler.y"
+#line 218 "./src/compiler.y"
     { (yyval.tree) = createOp(">=", (yyvsp[(1) - (3)].tree), (yyvsp[(3) - (3)].tree)); }
     break;
 
   case 46:
-#line 217 "./src/compiler.y"
+#line 219 "./src/compiler.y"
     { (yyval.tree) = createOp("!=", (yyvsp[(1) - (3)].tree), (yyvsp[(3) - (3)].tree)); }
     break;
 
   case 47:
-#line 219 "./src/compiler.y"
+#line 221 "./src/compiler.y"
     { (yyval.tree) = createOp("++", (yyvsp[(1) - (2)].tree), NULL); }
     break;
 
   case 48:
-#line 225 "./src/compiler.y"
+#line 227 "./src/compiler.y"
     { (yyval.tree) = createVar((yyvsp[(1) - (1)].id)); }
     break;
 
   case 49:
-#line 226 "./src/compiler.y"
+#line 228 "./src/compiler.y"
     {
 												(yyval.tree) = (yyvsp[(1) - (4)].tree);
 												pushChildNode((yyval.tree), (yyvsp[(3) - (4)].tree));
@@ -1820,7 +1822,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 1824 "y.tab.c"
+#line 1826 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2034,11 +2036,25 @@ yyreturn:
 }
 
 
-#line 233 "./src/compiler.y"
+#line 235 "./src/compiler.y"
+
+
+// void yyerror (const char* s) {
+// 	fprintf (stderr, "%s\n", s);
+//   }
+
+// void yyerror (string&  s) {
+// 	fprintf (stderr, "%s\n", s.c_str());
+// }
+
+// void yyerror (const char  *s) {
+// 	fprintf (stderr, "%s\n", s);
+// }
 
 void yyerror ( char  *s) {
-   fprintf (stderr, "%s\n", s);
- }
+	fprintf (stderr, "%s\n", s);
+}
+
 
 int main(){
 	return yyparse();

@@ -70,6 +70,8 @@
 												print_tree(codeTree);
 
 												execute_tree(codeTree);
+
+												print_symbol_table();
 											}
 			
 	
@@ -231,9 +233,23 @@
 
 
 %%
+
+// void yyerror (const char* s) {
+// 	fprintf (stderr, "%s\n", s);
+//   }
+
+// void yyerror (string&  s) {
+// 	fprintf (stderr, "%s\n", s.c_str());
+// }
+
+// void yyerror (const char  *s) {
+// 	fprintf (stderr, "%s\n", s);
+// }
+
 void yyerror ( char  *s) {
-   fprintf (stderr, "%s\n", s);
- }
+	fprintf (stderr, "%s\n", s);
+}
+
 
 int main(){
 	return yyparse();

@@ -10,13 +10,6 @@ int execute_stmt_list(node* tree);
 
 
 
-// void update_var(char* name, int val, int isArr=0, int index=0){
-//     if(isArr){
-//         symbol_table[name].data.arr[index] = val;
-//     }
-//     else 
-//         symbol_table[name].data.num = val;      // not sure. to change
-// }
 
 int execute_stmt(node* tree){
     // RETURNS 1 IF IT HIT A BREAK STATEMENT
@@ -99,18 +92,22 @@ void declareVar(node* tree, _DATA_TYPES_ varDataType){
 
     struct SymbolEntry varSymbolEntry;
     varSymbolEntry.type = varDataType;
+    varSymbolEntry.isArr = false;
     switch(varDataType){
         case _INT_:
             if(tree->child != nullptr){
                 varSymbolEntry.data.arr = (int*) malloc(sizeof(int) * evaluate_expr(tree->child));
+                varSymbolEntry.isArr = true;
             }
             else 
                 varSymbolEntry.data.num = 0;
             break;
         
         case _BOOLEAN_:
-            if(tree->child != nullptr)
+            if(tree->child != nullptr){
                 varSymbolEntry.data.arr = (int*) malloc(sizeof(int) * evaluate_expr(tree->child));
+                varSymbolEntry.isArr = true;
+            }
             else 
                 varSymbolEntry.data.boolean = 0;
             break;
@@ -120,7 +117,7 @@ void declareVar(node* tree, _DATA_TYPES_ varDataType){
     }
     
     symbol_table[tree->name] = varSymbolEntry;
-    variable_types[tree->name] = varDataType;
+    // variable_types[tree->name] = varDataType;
 }
 
 void execute_Ldecl_list(node* tree){

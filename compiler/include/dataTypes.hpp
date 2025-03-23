@@ -38,11 +38,10 @@ typedef struct node{
 
 enum _DATA_TYPES_{
     _INT_,
-    _ARRAY_,
     _BOOLEAN_
 };
 
-union geek { 
+union value { 
     int num; 
     int* arr;
     int boolean;
@@ -50,12 +49,50 @@ union geek {
 
 struct SymbolEntry {
     _DATA_TYPES_ type;
-    geek data;
+    value data;
+    bool isArr;
 };
 
 map<string, SymbolEntry> symbol_table;
 
-map<string, _DATA_TYPES_> variable_types;
+// map<string, _DATA_TYPES_> variable_types;
+
+void print_symbol_table(){
+    printf("\n\nSYMBOL TABLE: \n");
+
+    for(int i=0; i<70; i++) printf("-");
+    printf("\n");
+    printf("NAME\t\t\tTYPE\t\t\tVALUE\n");
+    for(int i=0; i<70; i++) printf("-");
+    printf("\n");
+
+    for (std::map<std::string, SymbolEntry>::const_iterator it = symbol_table.begin(); it != symbol_table.end(); ++it) {
+        // std::cout << it->first << " => " << it->second << std::endl;
+        printf("%s\t\t\t", it->first.c_str());
+        if(it->second.type == _INT_){
+            if(it->second.isArr){
+                printf("INT_ARR\t\t\t%p\n", it->second.data.arr);
+            }
+            else{
+                printf("INT\t\t\t%d\n", it->second.data.num);
+            }
+        }
+        else if(it->second.type == _BOOLEAN_){
+            if(it->second.isArr){
+                printf("BOOL_ARR\t\t\t%p\n", it->second.data.arr);
+            }
+            else{
+                if(it->second.data.boolean)
+                    printf("BOOL\t\t\tTRUE\n");
+                else
+                    printf("BOOL\t\t\tFALSE\n");
+                
+            }
+        }
+    }
+
+    printf("\n");
+}
 
 
 void update_var(char* name, int val, int isArr=0, int index=0){
@@ -113,7 +150,7 @@ node* createCopyNode(node* n){
 node* createStatement(){
     node* newNode = new node;
     newNode->id_type = STATEMENT;
-    newNode->name = "#";
+    newNode->name = strdup("#");
     newNode->child = nullptr;
     newNode->next = nullptr;
     newNode->val = 0;
@@ -124,7 +161,7 @@ node* createStatement(){
 node* createFunctionArgument(){
     node* newNode = new node;
     newNode->id_type = FUNC_ARGUMENT;
-    newNode->name = "#";
+    newNode->name = strdup("#");
     newNode->child = nullptr;
     newNode->next = nullptr;
     newNode->val = 0;
@@ -135,7 +172,7 @@ node* createFunctionArgument(){
 node* createLdecl_list(){
     node* newNode = new node;
     newNode->id_type = Ldecl_list;
-    newNode->name = "#";
+    newNode->name = strdup("#");
     newNode->child = nullptr;
     newNode->next = nullptr;
     newNode->val = 0;
@@ -202,10 +239,10 @@ int evaluate_expr(node* tree){
     return 0;
 }
 
-node* createOp(char* op, node* operand1, node* operand2){
+node* createOp(const char* op, node* operand1, node* operand2){
     node* newNode = new node;
     newNode->id_type = OP;
-    newNode->name = op;
+    newNode->name = strdup(op);
     newNode->child = operand1;
     newNode->next = nullptr;
     operand1->next = operand2;
@@ -219,7 +256,7 @@ node* createOp(char* op, node* operand1, node* operand2){
 node* createNum(int val){
     node* newNode = new node;
     newNode->id_type = NUMBER;
-    newNode->name = "#";
+    newNode->name = strdup("#");
     newNode->child = nullptr;
     newNode->next = nullptr;
     newNode->val = val;
@@ -230,7 +267,7 @@ node* createNum(int val){
 node* createDecl(){
     node* newNode = new node;
     newNode->id_type = DECLERATION;
-    newNode->name = "#";
+    newNode->name = strdup("#");
     newNode->child = nullptr;
     newNode->next = nullptr;
     newNode->val = 0;
@@ -250,10 +287,10 @@ node* createVar(char* var){
     return newNode;
 }
 
-node* createKeyword(char* name, int val){
+node* createKeyword(const char* name, int val){
     node* newNode = new node;
     newNode->id_type = KEY_WORD;
-    newNode->name = name;
+    newNode->name = strdup(name);
     newNode->child = nullptr;
     newNode->next = nullptr;
     newNode->val = val;
@@ -261,10 +298,10 @@ node* createKeyword(char* name, int val){
     return newNode;
 }
 
-node* createFunc(char* func_name){
+node* createFunc(const char* func_name){
     node* newNode = new node;
     newNode->id_type = FUNC;
-    newNode->name = func_name;
+    newNode->name = strdup(func_name);
     newNode->child = nullptr;
     newNode->next = nullptr;
     newNode->val = 0;

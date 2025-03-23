@@ -512,8 +512,9 @@ char *yytext;
 	#include<string.h>
 	#include "../include/y.tab.h"
 	void yyerror(char* s);
-#line 515 "lex.yy.c"
+	// void yyerror (const char* s);
 #line 516 "lex.yy.c"
+#line 517 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -730,9 +731,9 @@ YY_DECL
 		}
 
 	{
-#line 19 "./src/compiler.l"
+#line 20 "./src/compiler.l"
 
-#line 735 "lex.yy.c"
+#line 736 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -791,161 +792,167 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 20 "./src/compiler.l"
+#line 21 "./src/compiler.l"
 {}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 22 "./src/compiler.l"
+#line 23 "./src/compiler.l"
 {}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 23 "./src/compiler.l"
+#line 24 "./src/compiler.l"
 {return BEG;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 24 "./src/compiler.l"
+#line 25 "./src/compiler.l"
 {return END;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 26 "./src/compiler.l"
+#line 27 "./src/compiler.l"
 {return READ;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 28 "./src/compiler.l"
+#line 29 "./src/compiler.l"
 {return WRITE;}	
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 30 "./src/compiler.l"
+#line 31 "./src/compiler.l"
 {return IF;}	
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 32 "./src/compiler.l"
+#line 33 "./src/compiler.l"
 {return THEN;}	
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 34 "./src/compiler.l"
+#line 35 "./src/compiler.l"
 {return ELSE;}	
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 36 "./src/compiler.l"
+#line 37 "./src/compiler.l"
 {return ENDIF;}	
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 38 "./src/compiler.l"
+#line 39 "./src/compiler.l"
 {return FOR;}	
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 40 "./src/compiler.l"
+#line 41 "./src/compiler.l"
 {return T_INT;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 42 "./src/compiler.l"
+#line 43 "./src/compiler.l"
 {return T_BOOL;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 44 "./src/compiler.l"
+#line 45 "./src/compiler.l"
 {return DECL;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 46 "./src/compiler.l"
+#line 47 "./src/compiler.l"
 {return ENDDECL;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 48 "./src/compiler.l"
+#line 49 "./src/compiler.l"
 { return BREAK; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 50 "./src/compiler.l"
+#line 51 "./src/compiler.l"
 {return CONTINUE;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 52 "./src/compiler.l"
+#line 53 "./src/compiler.l"
 {return yytext[0];}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 54 "./src/compiler.l"
+#line 55 "./src/compiler.l"
 {return INCREMENT;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 56 "./src/compiler.l"
+#line 57 "./src/compiler.l"
 { return GREATERTHANOREQUAL; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 57 "./src/compiler.l"
+#line 58 "./src/compiler.l"
 { return LESSTHANOREQUAL; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 58 "./src/compiler.l"
+#line 59 "./src/compiler.l"
 { return EQUALEQUAL; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 59 "./src/compiler.l"
+#line 60 "./src/compiler.l"
 { return NOTEQUAL; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 61 "./src/compiler.l"
+#line 62 "./src/compiler.l"
 { yylval.num=atoi(yytext); return NUM; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 63 "./src/compiler.l"
+#line 64 "./src/compiler.l"
 { yylval.id=strdup(yytext); return VAR; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 65 "./src/compiler.l"
+#line 66 "./src/compiler.l"
 { return yytext[0];}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 68 "./src/compiler.l"
+#line 69 "./src/compiler.l"
 {;}
 	YY_BREAK
 case 28:
 /* rule 28 can match eol */
 YY_RULE_SETUP
-#line 69 "./src/compiler.l"
+#line 70 "./src/compiler.l"
 {;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 71 "./src/compiler.l"
+#line 72 "./src/compiler.l"
 {;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 73 "./src/compiler.l"
-{yyerror("ERROR_: invalid input\n");}
+#line 74 "./src/compiler.l"
+{
+								yyerror( strdup("ERROR_: invalid input\n") );
+								// yyerror( "ERROR_: invalid input\n" );
+								// yyerror("ERROR_: invalid input\n");
+								// char errorMsg[] = "ERROR_: invalid input\n";
+								// yyerror(errorMsg);
+								}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 75 "./src/compiler.l"
+#line 82 "./src/compiler.l"
 ECHO;
 	YY_BREAK
-#line 948 "lex.yy.c"
+#line 955 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1950,7 +1957,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 75 "./src/compiler.l"
+#line 82 "./src/compiler.l"
 
 
 

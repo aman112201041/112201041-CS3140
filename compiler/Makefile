@@ -14,4 +14,5 @@ all:
 
 
 clean:
-	rm -f ./include/y.tab.h ./src/y.tab.c ./src/lex.yy.c ./bin/compiler
+	rm -f ./include/y.tab.h ./src/y.tab.c ./src/lex.yy.c 
+	rm -rf ./bin/*

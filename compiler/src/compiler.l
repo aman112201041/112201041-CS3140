@@ -10,6 +10,7 @@
 	#include<string.h>
 	#include "../include/y.tab.h"
 	void yyerror(char* s);
+	// void yyerror (const char* s);
 %}
 
 %option noyywrap
@@ -70,7 +71,13 @@ continue						{return CONTINUE;}
 
 [ \t]							{;}
 
-.								{yyerror("ERROR_: invalid input\n");}
+.								{
+								yyerror( strdup("ERROR_: invalid input\n") );
+								// yyerror( "ERROR_: invalid input\n" );
+								// yyerror("ERROR_: invalid input\n");
+								// char errorMsg[] = "ERROR_: invalid input\n";
+								// yyerror(errorMsg);
+								}
 
 %%
 
