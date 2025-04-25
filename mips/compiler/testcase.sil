@@ -1,0 +1,17 @@
+decl
+	integer array[10];
+	integer key;
+	integer mid, temp;
+	integer test, i, l, r;
+	integer result;
+enddecl
+
+begin
+  test = 0;
+  i = test++;
+  write(test);
+  
+  test = test++;
+  write(test);
+	
+end

@@ -7,17 +7,10 @@
 
 	#include <bits/stdc++.h>
 	#include <iostream>
-
-	#include <stdio.h>
-	#include <stdlib.h>
-	#include <string.h>
-
 	using namespace std;
 	#include "../include/dataTypes.hpp"
 	#include "../include/printTree2.hpp"
 	#include "../include/executeTree.hpp"
-
-	#include "../include/code_to_mips.hpp"
 
 	
 	//string var_type = "NULL";
@@ -61,8 +54,7 @@
 %token <id> VAR 
 
 %type <tree> Ldecl_sec Ldecl_list Ldecl Lid_list Lid
-%type <tree> var_expr expr assign_stmt statement stmt_list write_stmt cond_stmt Statement_Sec 
-%type <tree> var_expr_list expr_list read_stmt
+%type <tree> var_expr expr assign_stmt statement stmt_list write_stmt cond_stmt Statement_Sec
 %type <tree> START
 
 %%
@@ -75,13 +67,11 @@
 												node* StmntList = $2;
 												pushChildNode(codeTree, StmntList);
 
-												//print_tree(codeTree);
+												print_tree(codeTree);
 
-												compile_tree(codeTree);
+												execute_tree(codeTree);
 
-												// execute_tree(codeTree);
-
-												// print_symbol_table();
+												print_symbol_table();
 											}
 			
 	
@@ -138,7 +128,6 @@
 		|		CONTINUE ';'					{ $$ = createContinue(); }
 		;
 
-/*
 	read_stmt:	READ '(' var_expr ')' 					{  }
 		;
 
@@ -148,21 +137,8 @@
 															pushChildNode($$, createFunctionArgument());
 															pushChildNode($$->child, $3);
 														}
-		;
-*/
+				
 
-	read_stmt:	READ '(' var_expr_list ')' 					{ 
-																$$=createFunc("READ");
-																pushChildNode($$, createFunctionArgument());
-																pushChildNode($$->child, $3);
-															}
-		;
-
-	write_stmt:		WRITE '(' expr_list ')' 			{ 
-															$$=createFunc("WRITE");
-															pushChildNode($$, createFunctionArgument());
-															pushChildNode($$->child, $3);
-														}
 		;
 	
 	assign_stmt:	var_expr '=' expr 		{ 
@@ -221,14 +197,7 @@
 																										pushChildNode($$, StmntList);
 																									}
 		;
-
-	expr_list:	expr						{$$ = $1;}
-		|	expr ',' expr_list				{pushNextNode($1, $3); $$ = $1;}
-		;
-
-	var_expr_list:	var_expr				{$$ = $1;}
-		|	var_expr ',' var_expr_list			{pushNextNode($1, $3); $$ = $1;}
-		;
+	
 
 	expr	:	NUM 						{ $$ = createNum($1); }
 		|	'-' expr						{  $$ = createOp("-", $2, NULL); }
@@ -265,59 +234,23 @@
 
 %%
 
+// void yyerror (const char* s) {
+// 	fprintf (stderr, "%s\n", s);
+//   }
+
+// void yyerror (string&  s) {
+// 	fprintf (stderr, "%s\n", s.c_str());
+// }
+
+// void yyerror (const char  *s) {
+// 	fprintf (stderr, "%s\n", s);
+// }
+
 void yyerror ( char  *s) {
 	fprintf (stderr, "%s\n", s);
 }
 
-extern FILE *yyin;
-extern FILE *yyout;
 
-void create_output_filename(const char *input, char *output) {
-    const char *dot = strrchr(input, '.');
-    if (dot) {
-        size_t base_len = dot - input;
-        strncpy(output, input, base_len);
-        output[base_len] = '\0';
-        strcat(output, ".s");
-    } else {
-        strcpy(output, input);
-        strcat(output, ".s");
-    }
-}
-
-int main(int argc, char *argv[]){
-	if (argc < 2) {
-        fprintf(stderr, "Usage: %s <sourcefile>\n", argv[0]);
-        return 1;
-    }
-
-    // Open input file
-    yyin = fopen(argv[1], "r");
-    if (!yyin) {
-        perror("Error opening input file");
-        return 1;
-    }
-
-    // Create and open output file
-    char output_file[256];
-    create_output_filename(argv[1], output_file);
-    yyout = fopen(output_file, "w");
-    if (!yyout) {
-        perror("Error opening output file");
-        fclose(yyin);
-        return 1;
-    }
-
-	
-	
-	printf("Compiling %s -> %s\n", argv[1], output_file);
-    
-
-
-	int result = yyparse();
-
-    fclose(yyin);
-    fclose(yyout);
-
-    return result;
+int main(){
+	return yyparse();
 }

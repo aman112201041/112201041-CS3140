@@ -42,15 +42,13 @@ integer							{return T_INT;}
 
 boolean							{return T_BOOL;}
 
-begindecl						{return DECL;}
+decl							{return DECL;}
 
 enddecl							{return ENDDECL;}
 
 break 							{ return BREAK; }
 
 continue						{return CONTINUE;}
-
-\/\/[^\n]*    					{ /* ignore single-line comments */ }
 
 [-+*/=()><;,\{\}\[\]\%]         {return yytext[0];}
 
@@ -74,10 +72,11 @@ continue						{return CONTINUE;}
 [ \t]							{;}
 
 .								{
-								if (yytext[0] == EOF) {
-									return 0;  // Stop parsing gracefully.
-								}
 								yyerror( strdup("ERROR_: invalid input\n") );
+								// yyerror( "ERROR_: invalid input\n" );
+								// yyerror("ERROR_: invalid input\n");
+								// char errorMsg[] = "ERROR_: invalid input\n";
+								// yyerror(errorMsg);
 								}
 
 %%
