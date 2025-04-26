@@ -272,15 +272,31 @@ void yyerror ( char  *s) {
 extern FILE *yyin;
 extern FILE *yyout;
 
+// void create_output_filename(const char *input, char *output) {
+//     const char *dot = strrchr(input, '.');
+//     if (dot) {
+//         size_t base_len = dot - input;
+//         strncpy(output, input, base_len);
+//         output[base_len] = '\0';
+//         strcat(output, ".s");
+//     } else {
+//         strcpy(output, input);
+//         strcat(output, ".s");
+//     }
+// }
+
 void create_output_filename(const char *input, char *output) {
-    const char *dot = strrchr(input, '.');
+    const char *slash = strrchr(input, '/');  // Find the last '/'
+    const char *filename = (slash) ? slash + 1 : input; // If slash exists, move past it, else use input
+
+    const char *dot = strrchr(filename, '.'); // Find last '.'
     if (dot) {
-        size_t base_len = dot - input;
-        strncpy(output, input, base_len);
+        size_t base_len = dot - filename;
+        strncpy(output, filename, base_len);
         output[base_len] = '\0';
         strcat(output, ".s");
     } else {
-        strcpy(output, input);
+        strcpy(output, filename);
         strcat(output, ".s");
     }
 }
