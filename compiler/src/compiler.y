@@ -75,13 +75,13 @@
 												node* StmntList = $2;
 												pushChildNode(codeTree, StmntList);
 
-												//print_tree(codeTree);
+												print_tree(codeTree);
 
 												compile_tree(codeTree);
 
-												// execute_tree(codeTree);
+												execute_tree(codeTree);
 
-												// print_symbol_table();
+												print_symbol_table();
 											}
 			
 	

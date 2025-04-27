@@ -151,10 +151,10 @@ void execute_tree(node* tree){
 
     execute_Decl(tree->child);
 
-    if(tree->child){
-        printf("\nOUTPUT:\n");
-        execute_stmt_list(tree->child->next);
-    }
+    // if(tree->child){
+    //     printf("\nOUTPUT:\n");
+    //     execute_stmt_list(tree->child->next);
+    // }
 }
 
 
